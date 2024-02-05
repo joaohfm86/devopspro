@@ -53,7 +53,7 @@ spec:
               secretKeyRef:
                 key: MONGO_INITDB_ROOT_USERNAME
                 name: mongodb-secret
-          - name: Mongo__Password
+          - name: Mongo_Password
             valueFrom:
               secretKeyRef:
                 key: MONGO_INITDB_ROOT_PASSWORD
