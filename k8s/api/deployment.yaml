@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: api-deployment
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: api
@@ -53,7 +53,7 @@ spec:
               secretKeyRef:
                 key: MONGO_INITDB_ROOT_USERNAME
                 name: mongodb-secret
-          - name: Mongo_Password
+          - name: Mongo__Password
             valueFrom:
               secretKeyRef:
                 key: MONGO_INITDB_ROOT_PASSWORD
