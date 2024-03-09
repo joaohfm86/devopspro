@@ -15,14 +15,21 @@ spec:
         - name: mongodb
           image: mongo:4.2.8
           ports:
-            - containerPort: 27017
+          - containerPort: 27017
+          volumeMounts:
+            - mountPath: /data/db
+               name: mongo-data
           resources:
             requests:
               memory: 256Mi
-              cpu: 1000m
+              cpu: 400m
             limits:
               memory: 256Mi
-              cpu: 1000m
+              cpu: 500m
           envFrom:
             - secretRef:
                 name: mongodb-secret
+      volumes:
+          - name: mongo-data
+            persistentVolumeClaim:
+              claimName: standard-rwo
