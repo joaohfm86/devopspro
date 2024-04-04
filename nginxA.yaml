@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-aaa
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx-aaa
+  template:
+    metadata:
+      labels:
+        app: nginx-aaa
+    spec:
+      containers:
+      - name: nginx-aaa
+        image: nginx
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
+        ports:
+        - containerPort: 80
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                    - "nginx-aaa"
+              topologyKey: kubernetes.io/hostname
+            
+              
