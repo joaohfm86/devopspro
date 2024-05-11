@@ -1,34 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: green
+  name: nginx
 spec:
   selector:
     matchLabels:
-      app: green
+      app: nginx
   template:
     metadata:
       labels:
-        app: green
+        app: nginx
     spec:
       containers:
-      - name: green
-        image: kubedevio/nginx-color:green
+      - name: nginx
+        image: nginx
         resources:
           limits:
             memory: "128Mi"
             cpu: "200m"
         ports:
         - containerPort: 80
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: green-service
-spec:
-  selector:
-    app: green
-  ports:
-  - port: 80
-    targetPort: 80
-  type: LoadBalancer 
+      tolerations:
+        - key: "special"
+          operator: "Equal"
+          value: "valor1"
+          effect: "NoExecute"

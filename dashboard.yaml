@@ -1,34 +1,39 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: green
+  name: k8s-dashboard-deploy
 spec:
   selector:
     matchLabels:
-      app: green
+      app: k8s-dashboard
   template:
     metadata:
       labels:
-        app: green
+        app: k8s-dashboard
     spec:
+      serviceAccount: user-dashboard
       containers:
-      - name: green
-        image: kubedevio/nginx-color:green
+      - name: k8s-dashboard
+        image: kubedevio/k8s-dashboard
         resources:
           limits:
             memory: "128Mi"
             cpu: "200m"
         ports:
         - containerPort: 80
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "Development"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: green-service
+  name: k8s-dashboard-service
 spec:
   selector:
-    app: green
+    app: k8s-dashboard
   ports:
   - port: 80
     targetPort: 80
-  type: LoadBalancer 
+  type: LoadBalancer
+
