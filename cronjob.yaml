@@ -1,25 +1,32 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata: 
-  name: roleta-job
+  name: cron-sorteador
 spec:
-  schedule: "*/1 * * * *"
-  concurrencyPolicy: Forbid
+  schedule: "*/2 * * * *"
+  sucessfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 2
+  suspend: false
+  concurrencyPolicy: Forbid 
   jobTemplate:
     spec:
-      backoffLimit: 20
+      ttlSecondsAfterFinished: 60
+      completions: 2
       parallelism: 2
-      completions: 3
+      backoffLimit: 10
       template:
+        metadata: 
+          labels:
+            app: sorteador
         spec:
           containers:
-          - name: job
-            image: kubedevio/roleta
-            args:
-              - "-w"
-              - "15"
-              - "-c"
-              - "2"
-              - "-m"
-              - "5"
+          - name: sorteador
+            image: fabricioveronez/sorteador:v1
+            env:
+              - name: NUM_ESCOLHIDO
+                value: "2"
+              - name: NUM_MAXIMO
+                value: "4"
+              - name: DELAY_SORTEIO
+                value: "10"
           restartPolicy: Never
