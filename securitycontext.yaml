@@ -3,26 +3,23 @@ kind: Deployment
 metadata:
   name: web
 spec:
-  replicas: 4
   selector:
     matchLabels:
       app: web
-  strategy:
-    #type: Recreate
-    type: RolligUpdate
-    rollingUpdate:
-      maxUnavailable: 50%
-      maxSurge: 50%
   template:
     metadata:
       labels:
         app: web
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
       containers:
       - name: web
-        image: fabricioveronez/web-color:green
+        image: fabricioveronez/conversao-temperatura:v1
         ports:
-        - containerPort: 80
+        - containerPort: 8080
 ---
 apiVersion: v1
 kind: Service
@@ -33,6 +30,5 @@ spec:
     app: web
   ports:
   - port: 80
-    targetPort: 80
-    nodePort: 30000
-  type: "LoadBalancer"
+    targetPort: 8080
+  type: LoadBalancer
